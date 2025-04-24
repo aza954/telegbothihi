@@ -9,8 +9,6 @@ import ru.aza954.telegrambothihi.service.JokesService;
 import ru.aza954.telegrambothihi.util.exception.JokesNotFoundExceptions;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @RequiredArgsConstructor
 @Service
@@ -25,29 +23,25 @@ public class JokesServiceImpl implements JokesService {
 
     public List<Jokes> getAllJokes(String title) {
         if (title != null) {
-            return StreamSupport.stream(jokesRepository.findAll().spliterator(), false)
-                    .filter(joke -> title.equals(joke.getTitle()))
-                    .collect(Collectors.toList());
-        } else {
-            return (List<Jokes>) jokesRepository.findAll();
+            return jokesRepository.findByTitle(title);
         }
+        return (List<Jokes>) jokesRepository.findAll();
     }
 
     public Jokes getJokesById(Long id) {
-        Jokes jokes = getJokesOrThrowExcep(id);
-        return jokes;
+        return getJokesOrThrowExcep(id);
     }
 
     private Jokes getJokesOrThrowExcep(Long id) {
-        Jokes jokes = jokesRepository.findById(id).orElseThrow(() -> new JokesNotFoundExceptions("Шутка с таким id: " + id + " не найдена"));
-        return jokes;
+        return jokesRepository.findById(id).orElseThrow(() -> new JokesNotFoundExceptions("Шутка с таким id: " + id + " не найдена"));
     }
 
     public Jokes editJokes(Long id, JokeSaveDTO joke) {
         Jokes joke1 = getJokesOrThrowExcep(id);
         joke1.setTitle(joke.getTitle());
         joke1.setContent(joke.getContent());
-        return joke1;
+
+        return jokesRepository.save(joke1);
     }
 
     public void deleteJokes(Long id) {
