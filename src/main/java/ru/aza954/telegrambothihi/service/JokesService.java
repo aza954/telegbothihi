@@ -1,6 +1,8 @@
 package ru.aza954.telegrambothihi.service;
 
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import ru.aza954.telegrambothihi.model.Jokes;
 import ru.aza954.telegrambothihi.model.dto.JokeSaveDTO;
 
@@ -11,6 +13,12 @@ public interface JokesService {
     Jokes addJokes(JokeSaveDTO jokeSaveDTO);
 
     List<Jokes> getAllJokes(String title);
+
+    List<Jokes> getTopJokes(int limit);
+
+    void logJokeCall(Long userId, Jokes joke);
+
+    Page<Jokes> getJokesPage(String title, Pageable pageable);
 
     Jokes getJokesById(Long id);
 

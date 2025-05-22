@@ -11,7 +11,8 @@ import lombok.NoArgsConstructor;
 public class Jokes {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "jokes_seq_gen")
+    @SequenceGenerator(name = "jokes_seq_gen", sequenceName = "jokes_id_seq", allocationSize = 1)
     private Long id;
 
     @Column
