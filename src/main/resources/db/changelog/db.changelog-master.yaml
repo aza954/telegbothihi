@@ -75,3 +75,92 @@ databaseChangeLog:
             referencedColumnNames: id
             constraintName: fk_joke_calls_jokes
             onDelete: CASCADE
+
+  - changeSet:
+      id: 3
+      author: aza954
+      changes:
+        - createSequence:
+            sequenceName: user_id_seq
+            startValue: 1
+            incrementBy: 1
+
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: false
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: username
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: expired
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: locked
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+              - column:
+                  name: enabled
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+
+        - addDefaultValue:
+            columnName: id
+            defaultValueComputed: "nextval('user_id_seq')"
+            tableName: users
+
+  - changeSet:
+      id: 4
+      author: aza954
+      changes:
+        - createSequence:
+            sequenceName: user_role_id_seq
+            startValue: 1
+            incrementBy: 1
+
+        - createTable:
+            tableName: user_roles
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: false
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_authority
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+
+        - addDefaultValue:
+            columnName: id
+            defaultValueComputed: "nextval('user_role_id_seq')"
+            tableName: user_roles
+
+        - addForeignKeyConstraint:
+            baseTableName: user_roles
+            baseColumnNames: user_id
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_user_roles_users
+            onDelete: CASCADE

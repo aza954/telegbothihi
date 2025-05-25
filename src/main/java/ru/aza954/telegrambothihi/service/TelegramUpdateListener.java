@@ -100,7 +100,7 @@ public class TelegramUpdateListener implements UpdatesListener {
                 }
 
                 if (update.message().text().startsWith("/add")) {
-                    String[] parts = update.message().text().split(" ", 3); // ограничиваем на 3 части
+                    String[] parts = update.message().text().split(" ", 3);
 
                     if (parts.length < 3) {
                         telegramBot.execute(new SendMessage(update.message().chat().id(), "Ошибка: недостаточно аргументов."));
